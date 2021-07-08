@@ -34,7 +34,7 @@ async function fetchGitHubUser(token) {
       Authorization: 'token ' + token,
     },
   })
-  
+
   return await request.data
 }
 
@@ -42,34 +42,45 @@ router.get('/callback', async (req, res, next) => {
   const code = req.query.code
 
   try {
-    const access_token = await getAccessToken({ code, client_id, client_secret })
+    const access_token = await getAccessToken({
+      code,
+      client_id,
+      client_secret,
+    })
     const githubUser = await fetchGitHubUser(access_token)
     const email = githubUser.email
     const user = await User.findOne({ where: { email } })
-  
+
     if (!user) {
       const newUser = await User.create({
         email,
         password: process.env.DEFAULT_PASSWORD,
-        link_avatar: `https://robohash.org/${email}`
+        link_avatar: githubUser.avatar_url,
       })
-  
-      const token = jwt.sign({
-        id: newUser.id,
-        email: newUser.email,
-      }, process.env.TOKEN_SECRET)
-  
-      return res.status(201).json({ token, email: newUser.email })
+
+      const token = jwt.sign(
+        {
+          id: newUser.id,
+          email: newUser.email,
+          link_avatar: newUser.link_avatar,
+        },
+        process.env.TOKEN_SECRET
+      )
+
+      return res
+        .status(201)
+        .json({ token, email: newUser.email, link_avatar: newUser.link_avatar })
     }
-  
+
     const clientPayload = {
       id: user.id,
       email: user.email,
+      link_avatar: user.link_avatar,
     }
-  
+
     const token = jwt.sign(clientPayload, process.env.TOKEN_SECRET)
-  
-    return res.status(200).json({ token, email })
+
+    return res.status(200).json({ token, email, link_avatar: clientPayload.link_avatar })
   } catch (err) {
     next({ msg: 'loginError' })
   }
