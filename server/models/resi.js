@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
   Resi.init(
     {
       awb: {
+        allowNull: false,
         type: DataTypes.STRING,
         validate: {
           notEmpty: {
@@ -27,6 +28,7 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       userId: {
+        allowNull: false,
         type: DataTypes.INTEGER,
         validate: {
           notEmpty: {
