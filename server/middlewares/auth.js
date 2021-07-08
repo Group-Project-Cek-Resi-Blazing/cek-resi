@@ -1,5 +1,5 @@
 const {User, Resi} = require('../models')
-const {decode} = require('./jwt')
+const {decode} = require('../helper/jwt')
 
 
 const authentication = (req, res, next)=>{
