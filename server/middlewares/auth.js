@@ -2,7 +2,7 @@ const {User, Resi} = require('../models')
 const {decode} = require('../helper/jwt')
 
 
-const authentication = (req, res, next)=>{
+const authentication = async (req, res, next)=>{
     try{
         if(!req.headers.access_token){
             throw({name: 'NOT_LOGIN'})
