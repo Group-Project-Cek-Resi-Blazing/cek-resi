@@ -5,7 +5,12 @@ class OngkirController {
   static async getCities(req, res, next) {
     try {
       let cities = await City.findAll()
-      cities.map(city => city.city_name)
+      cities = cities.map(city => {
+        return {
+          id: city.id,
+          city_name: city.city_name
+        }
+      })
 
       res.status(200).json(cities)
     } catch (err) {
