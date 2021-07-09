@@ -39,7 +39,7 @@ class UserController {
           const access_token = jwt.sign(payload, process.env.TOKEN_SECRET)
           return res
             .status(200)
-            .json({ access_token, email, link_avatar: user.link_avatar })
+            .json({ id: user.id, access_token, email, link_avatar: user.link_avatar })
         }
         throw { name: 'login_failed' }
       })
