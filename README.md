@@ -124,6 +124,7 @@ Check shipping cost of JNE, POS Indonesia, and TIKI.
 * **URL Params** <br>
 None
 * **Data Params** <br>
+Headers : `access_token`
 JSON body example : 
    ```
    {
@@ -244,7 +245,7 @@ Get cities code.
 * **URL Params** <br>
 None
 * **Data Params** <br>
-None
+Headers : `access_token`
 * **Success Response**
 	* **Code:** 200 <br>
 		**Content:**
@@ -259,6 +260,83 @@ None
                "city_name": "Aceh Barat Daya"
             }
         ]
+        ```
+* **Error Response:**
+    * **Code:** 500 <br>
+      **Content:**
+      ```
+      { 
+        "message" : "Internal server error" 
+      }
+      ```
+      
+---
+
+## Check AWB (Resi)
+Check the history of shipment by awb number.
+* **URL** <br>
+/resi
+* **Method** <br>
+`GET`
+* **URL Params** <br>
+Query : `courier, awb` <br>
+Example : `/resi?courier=jnt&awb=JP0529759978`
+* **Data Params** <br>
+Headers : `access_token`
+* **Success Response**
+	* **Code:** 200 <br>
+		**Content:**
+        ```
+        {
+            "summary": {
+               "awb": "JP0529759978",
+               "courier": "J&T Express",
+               "service": "",
+               "status": "DELIVERED",
+               "date": "2021-04-23 11:10:27",
+               "desc": "",
+               "amount": "",
+               "weight": ""
+            },
+            "detail": {
+               "origin": "",
+               "destination": "",
+               "shipper": "",
+               "receiver": ""
+            },
+            "history": [
+               {
+                     "date": "2021-04-23 11:10:27",
+                     "desc": "TERKIRIM: DROP POINT [BANTUL] (DITERIMA OLEH: NUGRAHA KIAT SAPUTRA)",
+                     "location": "BANTUL"
+               },
+               {
+                     "date": "2021-04-23 10:58:01",
+                     "desc": "SEDANG DIANTAR: DROP POINT [BANTUL] (CONTACT: AHMAD TRI WICAKSONO +6289692076283)",
+                     "location": "BANTUL"
+               },
+               {
+                     "date": "2021-04-22 23:34:41",
+                     "desc": "TELAH BERANGKAT: PUSAT TRANSIT [YOGYAKARTA] MENUJU [BANTUL]",
+                     "location": "YOGYAKARTA"
+               },
+               {
+                     "date": "2021-04-22 19:54:50",
+                     "desc": "TELAH TIBA: TRANSIT CENTER [YOGYAKARTA] DARI [DC_YOGYAKARTA]",
+                     "location": "YOGYAKARTA"
+               },
+               {
+                     "date": "2021-04-22 17:07:21",
+                     "desc": "TELAH BERANGKAT: PUSAT TRANSIT [YOGYAKARTA] MENUJU [YOGYAKARTA]",
+                     "location": "YOGYAKARTA"
+               },
+               {
+                     "date": "2021-04-22 15:49:31",
+                     "desc": "TELAH DIAMBIL: DROP POINT [YOGYAKARTA] (DIPROSES OLEH: CHRISTI OKTAVIANI)",
+                     "location": "YOGYAKARTA"
+               }
+            ]
+         }
         ```
 * **Error Response:**
     * **Code:** 500 <br>
