@@ -7,7 +7,7 @@ const authentication = async (req, res, next)=>{
         if(!req.headers.access_token){
             throw({name: 'NOT_LOGIN'})
         }
-        const access_token = req.headers
+        const access_token = req.headers.access_token
         const {id} = decode(access_token)
         const getUser = await User.findByPk(id)
     

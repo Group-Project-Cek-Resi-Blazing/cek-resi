@@ -11,7 +11,6 @@ class OngkirController {
           city_name: city.city_name
         }
       })
-
       res.status(200).json(cities)
     } catch (err) {
       next(err)
