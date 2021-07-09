@@ -1,35 +1,52 @@
-const { User } = require('../models');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const { User } = require('../models')
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 
 class UserController {
   static register(req, res, next) {
-    const { email, password } = req.body;
+    const { email, password } = req.body
 
-    User.create({ email, password })
-    .then(user => {
-      res.status(201).json({ data: { id: user.id, email: user.email } });
+    User.create({
+      email,
+      password,
+      link_avatar: `https://robohash.org/${email}`,
     })
-    .catch(err => {
-      next(err)
-    })
+      .then((user) => {
+        res.status(201).json({
+          data: {
+            id: user.id,
+            email: user.email,
+            link_avatar: user.link_avatar,
+          },
+        })
+      })
+      .catch((err) => {
+        next(err)
+      })
   }
 
   static login(req, res, next) {
-    const { email, password } = req.body;
+    const { email, password } = req.body
 
     User.findOne({ where: { email } })
-    .then(user => {
-      if (user && bcrypt.compareSync(password, user.password)) {
-        const access_token = jwt.sign({ id: user.id }, process.env.JWT_KEY);
-        return res.status(200).json({ access_token });
-      }
-      throw { name: 'login_failed' };
-    })
-    .catch(err => {
-      next(err);
-    })
+      .then((user) => {
+        if (user && bcrypt.compareSync(password, user.password)) {
+          const payload = {
+            id: user.id,
+            email,
+            link_avatar: user.link_avatar,
+          }
+          const access_token = jwt.sign(payload, process.env.TOKEN_SECRET)
+          return res
+            .status(200)
+            .json({ access_token, email, link_avatar: user.link_avatar })
+        }
+        throw { name: 'login_failed' }
+      })
+      .catch((err) => {
+        next(err)
+      })
   }
 }
 
-module.exports = UserController;
+module.exports = UserController
