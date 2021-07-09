@@ -47,10 +47,6 @@ class UserController {
         next(err)
       })
   }
-  static getProfile(req, res, next){
-    console.log(req.user);
-    return req.user
-  }
 }
 
 module.exports = UserController

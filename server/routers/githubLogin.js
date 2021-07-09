@@ -8,7 +8,7 @@ const client_id = process.env.GITHUB_CLIENT_ID
 const client_secret = process.env.GITHUB_CLIENT_SECRET
 
 router.get('/', (req, res) => {
-  const redirect_uri = 'http://localhost:3000/login/github/callback'
+  const redirect_uri = 'http://localhost:8080/login/github/callback'
   res.redirect(
     `https://github.com/login/oauth/authorize?client_id=${process.env.GITHUB_CLIENT_ID}&redirect_uri=${redirect_uri}`
   )
