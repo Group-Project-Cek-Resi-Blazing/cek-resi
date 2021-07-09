@@ -69,7 +69,12 @@ router.get('/callback', async (req, res, next) => {
 
       return res
         .status(201)
-        .json({ token, email: newUser.email, link_avatar: newUser.link_avatar })
+        .json({
+          id: newUser.id,
+          access_token: token,
+          email: newUser.email,
+          link_avatar: newUser.link_avatar,
+        })
     }
 
     const clientPayload = {
@@ -80,7 +85,14 @@ router.get('/callback', async (req, res, next) => {
 
     const token = jwt.sign(clientPayload, process.env.TOKEN_SECRET)
 
-    return res.status(200).json({ token, email, link_avatar: clientPayload.link_avatar })
+    return res
+      .status(200)
+      .json({
+        id: user.id,
+        access_token: token,
+        email,
+        link_avatar: clientPayload.link_avatar,
+      })
   } catch (err) {
     next({ msg: 'loginError' })
   }
